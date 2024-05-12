@@ -1,2 +1,2 @@
-docker build -t experiments .
-docker run --gpus all -it --rm -v $(pwd):/app experiments
+# docker build -t experiments .
+sudo docker run --gpus all -it --rm -v $(pwd):/app experiments
