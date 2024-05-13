@@ -19,8 +19,7 @@ import math
 import numpy as np
 from scipy.spatial import transform
 
-PLANE_URDF_PATH = ('third_party/bullet/examples/pybullet/gym/pybullet_data/'
-                   'plane.urdf')
+PLANE_URDF_PATH = "third_party/bullet/examples/pybullet/gym/pybullet_data/" "plane.urdf"
 
 EFFECTOR_HEIGHT = 0.145
 EFFECTOR_DOWN_ROTATION = transform.Rotation.from_rotvec([0, math.pi, 0])
@@ -29,8 +28,8 @@ X_MIN = 0.15
 X_MAX = 0.6
 Y_MIN = -0.3048
 Y_MAX = 0.3048
-CENTER_X = (X_MAX - X_MIN) / 2. + X_MIN
-CENTER_Y = (Y_MAX - Y_MIN) / 2. + Y_MIN
+CENTER_X = (X_MAX - X_MIN) / 2.0 + X_MIN
+CENTER_Y = (Y_MAX - Y_MIN) / 2.0 + Y_MIN
 
 WORKSPACE_BOUNDS_BUFFER = 0.08
 
@@ -39,7 +38,9 @@ ARM_DISTANCE_THRESHOLD = 0.06
 INSTRUCTION_LENGTH = 512  # max number of chars in instruction
 
 WORKSPACE_BOUNDS = np.array(((X_MIN, Y_MIN), (X_MAX, Y_MAX)))
-WORKSPACE_URDF_PATH = 'third_party/py/language_table/environments/assets/workspace_real.urdf'
+WORKSPACE_URDF_PATH = (
+    "third_party/py/language_table/environments/assets/workspace_real.urdf"
+)
 CAMERA_POSE = (0.75, 0, 0.5)
 CAMERA_ORIENTATION = (np.pi / 5, np.pi, -np.pi / 2)
 
@@ -48,18 +49,25 @@ IMAGE_HEIGHT = 180
 CAMERA_INTRINSICS = (
     0.803 * IMAGE_WIDTH,  # fx
     0,
-    IMAGE_WIDTH / 2.,  # cx
+    IMAGE_WIDTH / 2.0,  # cx
     0,
     0.803 * IMAGE_WIDTH,  # fy
-    IMAGE_HEIGHT / 2.,  # cy
+    IMAGE_HEIGHT / 2.0,  # cy
     0,
     0,
-    1)
+    1,
+)
 
 # Corresponds to:
 # rotation = transform.Rotation.from_rotvec([0, math.pi, 0])
 # translation = np.array([0.3, -0.2, 0.145])
-INITIAL_JOINT_POSITIONS = np.array([
-    -0.5875016909413221, 0.15985553866983415, -0.4992862770497537,
-    0.0017427885915130214, 0.33927183830553914, -3.7249551487437524
-])
+INITIAL_JOINT_POSITIONS = np.array(
+    [
+        -0.5875016909413221,
+        0.15985553866983415,
+        -0.4992862770497537,
+        0.0017427885915130214,
+        0.33927183830553914,
+        -3.7249551487437524,
+    ]
+)

@@ -20,54 +20,51 @@ import jax
 
 
 class ResnetDenseBlock(nn.Module):
-  """Single dense resnet block."""
-  width: int
+    """Single dense resnet block."""
 
-  @nn.compact
-  def __call__(self, x, *, train):
-    normal_initializer = jax.nn.initializers.normal(stddev=0.05)
-    y = nn.relu(x)
-    y = nn.Dense(
-        self.width // 4,
-        kernel_init=normal_initializer,
-        bias_init=normal_initializer)(
-            y)
-    y = nn.relu(y)
-    y = nn.Dense(
-        self.width // 4,
-        kernel_init=normal_initializer,
-        bias_init=normal_initializer)(
-            y)
-    y = nn.relu(y)
-    y = nn.Dense(
-        self.width,
-        kernel_init=normal_initializer,
-        bias_init=normal_initializer)(
-            y)
+    width: int
 
-    return x + y
+    @nn.compact
+    def __call__(self, x, *, train):
+        normal_initializer = jax.nn.initializers.normal(stddev=0.05)
+        y = nn.relu(x)
+        y = nn.Dense(
+            self.width // 4,
+            kernel_init=normal_initializer,
+            bias_init=normal_initializer,
+        )(y)
+        y = nn.relu(y)
+        y = nn.Dense(
+            self.width // 4,
+            kernel_init=normal_initializer,
+            bias_init=normal_initializer,
+        )(y)
+        y = nn.relu(y)
+        y = nn.Dense(
+            self.width, kernel_init=normal_initializer, bias_init=normal_initializer
+        )(y)
+
+        return x + y
 
 
 class DenseResnet(nn.Module):
-  """Dense Resnet module."""
+    """Dense Resnet module."""
 
-  width: int
-  num_blocks: int
-  value_net: bool
+    width: int
+    num_blocks: int
+    value_net: bool
 
-  @nn.compact
-  def __call__(self, x, *, train):
-    normal_initializer = jax.nn.initializers.normal(stddev=0.05)
-    x = nn.Dense(
-        self.width,
-        kernel_init=normal_initializer,
-        bias_init=normal_initializer)(
-            x)
-    for _ in range(self.num_blocks):
-      x = ResnetDenseBlock(self.width)(x, train=train)
+    @nn.compact
+    def __call__(self, x, *, train):
+        normal_initializer = jax.nn.initializers.normal(stddev=0.05)
+        x = nn.Dense(
+            self.width, kernel_init=normal_initializer, bias_init=normal_initializer
+        )(x)
+        for _ in range(self.num_blocks):
+            x = ResnetDenseBlock(self.width)(x, train=train)
 
-    if self.value_net:
-      x = nn.Dense(
-          1, kernel_init=normal_initializer, bias_init=normal_initializer)(
-              x)
-    return x
+        if self.value_net:
+            x = nn.Dense(
+                1, kernel_init=normal_initializer, bias_init=normal_initializer
+            )(x)
+        return x

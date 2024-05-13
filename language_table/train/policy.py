@@ -26,62 +26,69 @@ EPS = jnp.finfo(jnp.float32).eps
 
 
 class BCJaxPyPolicy(py_policy.PyPolicy):
-  """Runs inference with a BC policy."""
+    """Runs inference with a BC policy."""
 
-  def __init__(self, time_step_spec, action_spec, model, checkpoint_path,
-               rng, params=None, action_statistics=None):
-    super(BCJaxPyPolicy, self).__init__(time_step_spec, action_spec)
-    self.model = model
-    self.rng = rng
+    def __init__(
+        self,
+        time_step_spec,
+        action_spec,
+        model,
+        checkpoint_path,
+        rng,
+        params=None,
+        action_statistics=None,
+    ):
+        super(BCJaxPyPolicy, self).__init__(time_step_spec, action_spec)
+        self.model = model
+        self.rng = rng
 
-    if params is not None and action_statistics is not None:
-      variables = {
-          "params": params,
-          "batch_stats": {}
-      }
-    else:
-      state_dict = checkpoints.restore_checkpoint(checkpoint_path, None)
-      variables = {
-          "params": state_dict["params"],
-          "batch_stats": state_dict["batch_stats"]
-      }
+        if params is not None and action_statistics is not None:
+            variables = {"params": params, "batch_stats": {}}
+        else:
+            state_dict = checkpoints.restore_checkpoint(checkpoint_path, None)
+            variables = {
+                "params": state_dict["params"],
+                "batch_stats": state_dict["batch_stats"],
+            }
 
-    if action_statistics is not None:
-      self.action_mean = np.array(action_statistics["mean"])
-      self.action_std = np.array(action_statistics["std"])
-    else:
-      # We can load the observation and action statistics from the state dict.
-      self.action_mean = np.array(
-          state_dict["norm_info"]["action_statistics"]["mean"])
-      self.action_std = np.array(
-          state_dict["norm_info"]["action_statistics"]["std"])
+        if action_statistics is not None:
+            self.action_mean = np.array(action_statistics["mean"])
+            self.action_std = np.array(action_statistics["std"])
+        else:
+            # We can load the observation and action statistics from the state dict.
+            self.action_mean = np.array(
+                state_dict["norm_info"]["action_statistics"]["mean"]
+            )
+            self.action_std = np.array(
+                state_dict["norm_info"]["action_statistics"]["std"]
+            )
 
-      self._rgb_mean = jnp.array(
-          state_dict["norm_info"]["observation_statistics"]["rgb"]["mean"])
-      self._rgb_std = jnp.array(
-          state_dict["norm_info"]["observation_statistics"]["rgb"]["std"])
+            self._rgb_mean = jnp.array(
+                state_dict["norm_info"]["observation_statistics"]["rgb"]["mean"]
+            )
+            self._rgb_std = jnp.array(
+                state_dict["norm_info"]["observation_statistics"]["rgb"]["std"]
+            )
 
-    self.variables = variables
+        self.variables = variables
 
-    self._run_action_inference_jit = jax.jit(self._run_action_inference)
+        self._run_action_inference_jit = jax.jit(self._run_action_inference)
 
-  def _run_action_inference(self, observation):
-    # Add a batch dim.
-    observation = jax.tree_map(lambda x: jnp.expand_dims(x, 0), observation)
+    def _run_action_inference(self, observation):
+        # Add a batch dim.
+        observation = jax.tree_map(lambda x: jnp.expand_dims(x, 0), observation)
 
-    normalized_action = self.model.apply(
-        self.variables, observation, train=False)
-    action = (
-        normalized_action * jnp.maximum(self.action_std, EPS) +
-        self.action_mean)
+        normalized_action = self.model.apply(self.variables, observation, train=False)
+        action = (
+            normalized_action * jnp.maximum(self.action_std, EPS) + self.action_mean
+        )
 
-    # Clip the action to spec.
-    action = jnp.clip(action, self.action_spec.minimum,
-                      self.action_spec.maximum)
+        # Clip the action to spec.
+        action = jnp.clip(action, self.action_spec.minimum, self.action_spec.maximum)
 
-    return action
+        return action
 
-  def _action(self, time_step, policy_state=(), seed=0):
-    observation = time_step.observation
-    action = self._run_action_inference_jit(observation)[0]
-    return policy_step.PolicyStep(action=action)
+    def _action(self, time_step, policy_state=(), seed=0):
+        observation = time_step.observation
+        action = self._run_action_inference_jit(observation)[0]
+        return policy_step.PolicyStep(action=action)

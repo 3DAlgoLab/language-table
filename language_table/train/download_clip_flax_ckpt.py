@@ -25,22 +25,23 @@ from scenic.projects.baselines.clip import model
 import tensorflow as tf
 
 _CHECKPOINT_DIRECTORY = flags.DEFINE_string(
-    'checkpoint_directory', None, 'The directory to save the checkpoint.')
+    "checkpoint_directory", None, "The directory to save the checkpoint."
+)
 
 
 def main(argv):
-  if len(argv) > 1:
-    raise app.UsageError('Too many command-line arguments.')
+    if len(argv) > 1:
+        raise app.UsageError("Too many command-line arguments.")
 
-  model_vars = model.load_model_vars(model_name='vit_b16')
+    model_vars = model.load_model_vars(model_name="vit_b16")
 
-  out_directory = _CHECKPOINT_DIRECTORY.value
-  if not tf.io.gfile.exists(out_directory):
-    tf.io.gfile.makedirs(out_directory)
-  ckpt = checkpoint.Checkpoint(base_directory=out_directory)
+    out_directory = _CHECKPOINT_DIRECTORY.value
+    if not tf.io.gfile.exists(out_directory):
+        tf.io.gfile.makedirs(out_directory)
+    ckpt = checkpoint.Checkpoint(base_directory=out_directory)
 
-  ckpt.save(model_vars)
+    ckpt.save(model_vars)
 
 
-if __name__ == '__main__':
-  app.run(main)
+if __name__ == "__main__":
+    app.run(main)

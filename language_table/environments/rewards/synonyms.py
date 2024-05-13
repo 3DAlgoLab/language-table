@@ -18,61 +18,61 @@ import collections
 
 
 def get_block_synonyms(block, blocks_on_table):
-  """Get synonyms for blocks based on what is on table."""
-  color, shape = get_color_shape(block)
-  color_counts, shape_counts = count_color_shape(blocks_on_table)
-  synonyms = []
-  if color_counts[color] == 1:
-    # There is only one 'red' block, so feel free to refer to it as
-    # 'red block'.
-    synonyms.append('%s block' % color)
-  if shape_counts[shape] == 1:
-    # There is only one 'star' block, so feel free to refer to it as
-    # 'star'.
-    synonyms.append(shape)
-  # (color, shape) is always unique.
-  synonyms.append('%s %s' % (color, shape))
-  return synonyms
+    """Get synonyms for blocks based on what is on table."""
+    color, shape = get_color_shape(block)
+    color_counts, shape_counts = count_color_shape(blocks_on_table)
+    synonyms = []
+    if color_counts[color] == 1:
+        # There is only one 'red' block, so feel free to refer to it as
+        # 'red block'.
+        synonyms.append("%s block" % color)
+    if shape_counts[shape] == 1:
+        # There is only one 'star' block, so feel free to refer to it as
+        # 'star'.
+        synonyms.append(shape)
+    # (color, shape) is always unique.
+    synonyms.append("%s %s" % (color, shape))
+    return synonyms
 
 
 def count_color_shape(blocks_on_table):
-  colors, shapes = zip(*[get_color_shape(i) for i in blocks_on_table])
-  color_counts = collections.Counter(colors)
-  shape_counts = collections.Counter(shapes)
-  return color_counts, shape_counts
+    colors, shapes = zip(*[get_color_shape(i) for i in blocks_on_table])
+    color_counts = collections.Counter(colors)
+    shape_counts = collections.Counter(shapes)
+    return color_counts, shape_counts
 
 
 def get_color_shape(block):
-  color, shape = block.split('_')
-  return color, shape
+    color, shape = block.split("_")
+    return color, shape
 
 
 PUSH_VERBS = [
-    'push the',
-    'move the',
-    'slide the',
-    'put the',
+    "push the",
+    "move the",
+    "slide the",
+    "put the",
 ]
 
 PREPOSITIONS = [
-    'to the',
-    'towards the',
-    'close to the',
-    'next to the',
+    "to the",
+    "towards the",
+    "close to the",
+    "next to the",
 ]
 
 POINT_PREPOSITIONS = [
-    'point next to the',
-    'point close to the',
-    'point to the',
-    'point at the',
-    'move the arm next to the',
-    'move the arm close to the',
-    'move the arm to the',
-    'move your arm next to the',
-    'move your arm close to the',
-    'move your arm to the',
-    'move next to the',
-    'move close to the',
-    'move to the',
+    "point next to the",
+    "point close to the",
+    "point to the",
+    "point at the",
+    "move the arm next to the",
+    "move the arm close to the",
+    "move the arm to the",
+    "move your arm next to the",
+    "move your arm close to the",
+    "move your arm to the",
+    "move next to the",
+    "move close to the",
+    "move to the",
 ]

@@ -27,23 +27,23 @@ from matplotlib import pyplot as plt
 
 
 def main(argv):
-  if len(argv) > 1:
-    raise app.UsageError('Too many command-line arguments.')
+    if len(argv) > 1:
+        raise app.UsageError("Too many command-line arguments.")
 
-  env = language_table.LanguageTable(
-      block_mode=blocks.LanguageTableBlockVariants.BLOCK_8,
-      reward_factory=block2block.BlockToBlockReward,
-      control_frequency=10.0,
-  )
-  _ = env.reset()
+    env = language_table.LanguageTable(
+        block_mode=blocks.LanguageTableBlockVariants.BLOCK_8,
+        reward_factory=block2block.BlockToBlockReward,
+        control_frequency=10.0,
+    )
+    _ = env.reset()
 
-  # Take a few random actions.
-  for _ in range(5):
-    env.step(env.action_space.sample())
+    # Take a few random actions.
+    for _ in range(5):
+        env.step(env.action_space.sample())
 
-  # Save a rendered image.
-  plt.imsave('/tmp/language_table_render.png', env.render())
+    # Save a rendered image.
+    plt.imsave("/tmp/language_table_render.png", env.render())
 
 
-if __name__ == '__main__':
-  app.run(main)
+if __name__ == "__main__":
+    app.run(main)

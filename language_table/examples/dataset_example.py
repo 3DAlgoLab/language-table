@@ -29,29 +29,29 @@ from absl import app
 import tensorflow_datasets as tfds
 
 dataset_paths = {
-    'language_table': 'gs://gresearch/robotics/language_table/0.0.1/',
-    'language_table_sim': 'gs://gresearch/robotics/language_table_sim/0.0.1/',
+    "language_table": "gs://gresearch/robotics/language_table/0.0.1/",
+    "language_table_sim": "gs://gresearch/robotics/language_table_sim/0.0.1/",
 }
 
 
 def main(argv):
-  if len(argv) > 1:
-    raise app.UsageError('Too many command-line arguments.')
+    if len(argv) > 1:
+        raise app.UsageError("Too many command-line arguments.")
 
-  # Iterate through 5 items in language_table.
-  builder = tfds.builder_from_directory(dataset_paths['language_table'])
-  ds = builder.as_dataset(split='train')
-  ds = ds.flat_map(lambda x: x['steps'])  # get the dataset as individual steps
-  for item in iter(ds.take(5)):
-    print(item)
+    # Iterate through 5 items in language_table.
+    builder = tfds.builder_from_directory(dataset_paths["language_table"])
+    ds = builder.as_dataset(split="train")
+    ds = ds.flat_map(lambda x: x["steps"])  # get the dataset as individual steps
+    for item in iter(ds.take(5)):
+        print(item)
 
-  # Iterate through 5 items in language_table_sim.
-  builder = tfds.builder_from_directory(dataset_paths['language_table_sim'])
-  ds = builder.as_dataset(split='train')
-  ds = ds.flat_map(lambda x: x['steps'])  # get the dataset as individual steps
-  for item in iter(ds.take(5)):
-    print(item)
+    # Iterate through 5 items in language_table_sim.
+    builder = tfds.builder_from_directory(dataset_paths["language_table_sim"])
+    ds = builder.as_dataset(split="train")
+    ds = ds.flat_map(lambda x: x["steps"])  # get the dataset as individual steps
+    for item in iter(ds.take(5)):
+        print(item)
 
 
-if __name__ == '__main__':
-  app.run(main)
+if __name__ == "__main__":
+    app.run(main)

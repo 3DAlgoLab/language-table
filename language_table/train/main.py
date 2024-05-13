@@ -38,33 +38,33 @@ flags.mark_flags_as_required(["config", "workdir"])
 
 
 def main(argv):
-  del argv
+    del argv
 
-  # Hide any GPUs form TensorFlow. Otherwise TF might reserve memory and make
-  # it unavailable to JAX.
-  tf.config.experimental.set_visible_devices([], "GPU")
+    # Hide any GPUs form TensorFlow. Otherwise TF might reserve memory and make
+    # it unavailable to JAX.
+    tf.config.experimental.set_visible_devices([], "GPU")
 
-  if FLAGS.jax_backend_target:
-    logging.info("Using JAX backend target %s", FLAGS.jax_backend_target)
-    jax_xla_backend = (
-        "None" if FLAGS.jax_xla_backend is None else FLAGS.jax_xla_backend
+    if FLAGS.jax_backend_target:
+        logging.info("Using JAX backend target %s", FLAGS.jax_backend_target)
+        jax_xla_backend = (
+            "None" if FLAGS.jax_xla_backend is None else FLAGS.jax_xla_backend
+        )
+        logging.info("Using JAX XLA backend %s", jax_xla_backend)
+
+    logging.info("JAX process: %d / %d", jax.process_index(), jax.process_count())
+    logging.info("JAX devices: %r", jax.devices())
+
+    platform.work_unit().set_task_status(
+        f"process_index: {jax.process_index()}, "
+        f"process_count: {jax.process_count()}"
     )
-    logging.info("Using JAX XLA backend %s", jax_xla_backend)
+    platform.work_unit().create_artifact(
+        platform.ArtifactType.DIRECTORY, FLAGS.workdir, "workdir"
+    )
 
-  logging.info("JAX process: %d / %d", jax.process_index(), jax.process_count())
-  logging.info("JAX devices: %r", jax.devices())
-
-  platform.work_unit().set_task_status(
-      f"process_index: {jax.process_index()}, "
-      f"process_count: {jax.process_count()}"
-  )
-  platform.work_unit().create_artifact(
-      platform.ArtifactType.DIRECTORY, FLAGS.workdir, "workdir"
-  )
-
-  train.train(FLAGS.config, FLAGS.workdir, FLAGS.tf_data_service_address)
+    train.train(FLAGS.config, FLAGS.workdir, FLAGS.tf_data_service_address)
 
 
 if __name__ == "__main__":
-  jax.config.config_with_absl()
-  app.run(main)
+    jax.config.config_with_absl()
+    app.run(main)

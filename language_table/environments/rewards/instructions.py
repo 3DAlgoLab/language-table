@@ -26,18 +26,20 @@ CLIP_VOCAB_SIZE = 49408
 
 
 def generate_all_instructions(block_mode):
-  """Gets all instructions across all environments."""
-  return (block2block.generate_all_instructions(block_mode) +
-          point2block.generate_all_instructions(block_mode) +
-          block2relativelocation.generate_all_instructions(block_mode) +
-          block2absolutelocation.generate_all_instructions(block_mode) +
-          block2block_relative_location.generate_all_instructions(block_mode) +
-          separate_blocks.generate_all_instructions(block_mode))
+    """Gets all instructions across all environments."""
+    return (
+        block2block.generate_all_instructions(block_mode)
+        + point2block.generate_all_instructions(block_mode)
+        + block2relativelocation.generate_all_instructions(block_mode)
+        + block2absolutelocation.generate_all_instructions(block_mode)
+        + block2block_relative_location.generate_all_instructions(block_mode)
+        + separate_blocks.generate_all_instructions(block_mode)
+    )
 
 
 def vocab_size(block_mode):
-  words = set()
-  for instruction in generate_all_instructions(block_mode):
-    for word in instruction.split(' '):
-      words.add(word)
-  return len(words)
+    words = set()
+    for instruction in generate_all_instructions(block_mode):
+        for word in instruction.split(" "):
+            words.add(word)
+    return len(words)

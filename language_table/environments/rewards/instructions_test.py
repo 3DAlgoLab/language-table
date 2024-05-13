@@ -22,18 +22,22 @@ import tensorflow as tf
 
 class InstructionsTest(tf.test.TestCase):
 
-  def test_expected_instructions_generated(self):
-    # This ensures that the same fixed number of instructions are generated
-    # for each block mode.
-    inst_block4 = instructions.generate_all_instructions(
-        blocks.LanguageTableBlockVariants.BLOCK_4)
-    self.assertLen(inst_block4, 12652)
-    inst_block8 = instructions.generate_all_instructions(
-        blocks.LanguageTableBlockVariants.BLOCK_8)
-    self.assertLen(inst_block8, 30264)
-    inst_n_choose_k = instructions.generate_all_instructions(
-        blocks.LanguageTableBlockVariants.N_CHOOSE_K)
-    self.assertLen(inst_n_choose_k, 80368)
+    def test_expected_instructions_generated(self):
+        # This ensures that the same fixed number of instructions are generated
+        # for each block mode.
+        inst_block4 = instructions.generate_all_instructions(
+            blocks.LanguageTableBlockVariants.BLOCK_4
+        )
+        self.assertLen(inst_block4, 12652)
+        inst_block8 = instructions.generate_all_instructions(
+            blocks.LanguageTableBlockVariants.BLOCK_8
+        )
+        self.assertLen(inst_block8, 30264)
+        inst_n_choose_k = instructions.generate_all_instructions(
+            blocks.LanguageTableBlockVariants.N_CHOOSE_K
+        )
+        self.assertLen(inst_n_choose_k, 80368)
 
-if __name__ == '__main__':
-  tf.test.main()
+
+if __name__ == "__main__":
+    tf.test.main()
