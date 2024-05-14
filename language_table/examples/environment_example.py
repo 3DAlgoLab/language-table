@@ -42,7 +42,7 @@ def main(argv):
         env.step(env.action_space.sample())
 
     # Save a rendered image.
-    plt.imsave("/tmp/language_table_render.png", env.render())
+    plt.imsave("./language_table_render.png", env.render())
 
 
 if __name__ == "__main__":
