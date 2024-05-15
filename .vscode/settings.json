@@ -19,5 +19,9 @@
     "titleBar.inactiveBackground": "#588b9499",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.remoteColor": "#588b94"
+  "peacock.remoteColor": "#588b94",
+  "cSpell.words": [
+    "woerkdir",
+    "workdir"
+  ]
 }
