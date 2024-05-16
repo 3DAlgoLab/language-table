@@ -4,9 +4,9 @@
 
 ## ModuLab LLM Vision 2 Team Modification
 
-- `experiments' folder added to the root directory to store the experimental code and etc
-- 'black' python formatter applied to the code
-- 'requirements_new.txt' updated to include the recent revised packages
+- `experiments` folder added to the root directory to store the experimental code and etc
+- `black` python formatter applied to the code
+- `requirements_new.txt` added to consider the recent revised packages
 
 ---
 
