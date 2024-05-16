@@ -1,7 +1,5 @@
 # Language Table
 
----
-
 ## ModuLab LLM Vision 2 Team Modification
 
 - `experiments` folder added to the root directory to store the experimental code and etc
