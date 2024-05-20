@@ -1,13 +1,16 @@
 import gradio as gr
 
-
 secret_word = "gradio"
+css = """
+    #warning {background-color: #FFCCCB}
+    .feedback textarea {font-size: 24px !important}
+"""
 
-with gr.Blocks() as demo:
+with gr.Blocks(css=css) as demo:
     used_letters_var = gr.State([])
     with gr.Row() as row:
         with gr.Column():
-            input_letter = gr.Textbox(label="Enter Letter")
+            input_letter = gr.Textbox(label="Enter Letter", elem_classes="feedback")
             btn = gr.Button("Guess Letter")
         with gr.Column():
             hangman = gr.Textbox(label="Hangman", value="_ " * len(secret_word))
