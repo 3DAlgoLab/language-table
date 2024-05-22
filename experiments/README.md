@@ -1,7 +1,5 @@
-# Language Table Experiments
+# Language Table forked for Vision2 Language Team
 
-- You need to install `portaudio19` before install packages with `requirements_new.txt`.
+## Table of Contents
 
-```bash
-sudo apt-get install portaudio19-dev
-```
+- `gradio_tutorials`: A collection of tutorials for using Gradio, a library for creating UIs for machine learning models.
