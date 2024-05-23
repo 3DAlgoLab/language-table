@@ -1,15 +1,14 @@
 # Check env.
-import glob
 import gradio as gr
-
-from language_table.environments import blocks
-from language_table.environments import language_table
-from language_table.environments.rewards import block2block
 import numpy as np
 from icecream import ic
 
+from language_table.environments import blocks, language_table
+from language_table.environments.rewards import block2block
+
 env = None
 obs = None
+reward = 0
 
 
 def decode_inst(inst):
@@ -43,8 +42,14 @@ def init():
 
 def get_current_observation():
     if obs is not None:
-        return obs["rgb"]
-    return None
+        return obs["rgb"], get_current_status_text()
+    return None, None
+
+
+def get_current_status_text():
+    if obs is None:
+        return "No environment initialized."
+    return f"Reward: {reward}, EE: {obs['effector_target_translation']}"
 
 
 def get_current_instruction():
@@ -54,7 +59,7 @@ def get_current_instruction():
 
 
 def random_step():
-    global obs
+    global obs, reward
     if env is not None:
         action = env.action_space.sample()
         ic(action)
@@ -64,44 +69,52 @@ def random_step():
 
 
 def step(dx, dy):
-    global obs
+    global obs, reward
     if env is not None:
         action = [dx, dy]
         ic(action)
         obs, reward, done, info = env.step(action)
+        # ic(obs)
+        ic(reward)
         return get_current_observation()
     return None
 
 
-with gr.Blocks(title="🤖Robot Env. Viewer") as demo:
+with gr.Blocks(title="Robot Env. Viewer") as demo:
     gr.Markdown("## 🤖 Environment Viewer")
     gr.Textbox(value=get_current_instruction, label="Instruction", interactive=False)
     img = gr.Image(
         label="observation",
         interactive=False,
-        value=get_current_observation,  # type: ignore
+        value=lambda: get_current_observation()[0],  # type: ignore
+    )
+    status_text = gr.Textbox(
+        value=get_current_status_text, label="Status", interactive=False
     )
 
     with gr.Row():
         btn_reset = gr.Button("Reset")
-        btn_reset.click(init, inputs=None, outputs=img)
+        btn_reset.click(init, inputs=None, outputs=[img, status_text])
 
         btn_step_random = gr.Button("Random Step")
-        btn_step_random.click(random_step, inputs=None, outputs=img)
+        btn_step_random.click(random_step, inputs=None, outputs=[img, status_text])
 
     with gr.Row():
-        current_dx = gr.Slider(
-            minimum=-0.5, maximum=0.5, step=0.01, label="dx(m)", value=0
-        )
-        current_dy = gr.Slider(
-            minimum=-0.5, maximum=0.5, step=0.01, label="dy(m)", value=0
-        )
+        with gr.Column(scale=2):
+            current_dx = gr.Slider(
+                minimum=-0.5, maximum=0.5, step=0.01, label="dx(m)", value=0
+            )
+            current_dy = gr.Slider(
+                minimum=-0.5, maximum=0.5, step=0.01, label="dy(m)", value=0
+            )
         btn_zero = gr.Button("Zero")
         btn_reset.click(lambda: (0, 0), outputs=[current_dx, current_dy])
         btn_step = gr.Button("Step")
-        btn_step.click(step, inputs=[current_dx, current_dy], outputs=img)
+        btn_step.click(
+            step, inputs=[current_dx, current_dy], outputs=[img, status_text]
+        )
         btn_zero.click(lambda: (0, 0), outputs=[current_dx, current_dy])
 
 if __name__ == "__main__":
     init()
-    demo.launch()
+    demo.launch(favicon_path="./robo-favicon.png")
