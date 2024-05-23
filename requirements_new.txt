@@ -24,7 +24,7 @@ debugpy>=1.6.4
 decorator>=5.1.1
 defusedxml>=0.7.1
 dill>=0.3.6
-dm-reverb>=0.11
+# dm-reverb>=0.11
 dm-tree>=0.1.7
 entrypoints>=0.4
 etils>=0.6.0
@@ -148,11 +148,12 @@ tensorflow-datasets>=4.7.0
 tensorflow-io-gcs-filesystem>=0.26.0
 tensorflow-metadata>=1.10.0
 tensorflow-probability>=0.17.0
+tensorflow-text<2.16
 tensorstore>=0.1.22
 termcolor>=1.1.0
 terminado>=0.17.0
 tf-agents>=0.14.0
-tensorflow>=2.13.0
+tensorflow <2.16
 toml>=0.10.2
 toolz>=0.12.0
 torch>=1.13.1
