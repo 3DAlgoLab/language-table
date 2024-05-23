@@ -1,1 +1,1 @@
-PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python python language_table/eval/main.py --config=./language_table/train/configs/language_table_sim_local.py --workdir=/tmp/language_table_train/
+JAX_TRACEBACK_FILTERING=off PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python python language_table/eval/main.py --config=./language_table/train/configs/language_table_sim_local.py --workdir=./experiments/eval/ --checkpoint_path=./experiments/checkpoints/bc_resnet_sim_checkpoint_955000
