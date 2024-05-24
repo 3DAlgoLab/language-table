@@ -9,6 +9,8 @@ from language_table.environments.rewards import block2block
 env = None
 obs = None
 reward = 0
+step_id = 0
+np.set_printoptions(precision=3)
 
 
 def decode_inst(inst):
@@ -18,7 +20,7 @@ def decode_inst(inst):
 
 def init():
     """Initialize the environment"""
-    global env, obs
+    global env, obs, step_id
 
     if env is not None:
         env.close()
@@ -36,6 +38,7 @@ def init():
         seed=0,
     )
     obs = env.reset()
+    step_id = 0
     print("Environment initialized.")
     return get_current_observation()
 
@@ -49,7 +52,9 @@ def get_current_observation():
 def get_current_status_text():
     if obs is None:
         return "No environment initialized."
-    return f"Reward: {reward}, EE: {obs['effector_target_translation']}"
+    return (
+        f"Step: {step_id:03}, Reward: {reward}, EE:{obs['effector_target_translation']}"
+    )
 
 
 def get_current_instruction():
@@ -58,26 +63,22 @@ def get_current_instruction():
     return "No Instruction!"
 
 
-def random_step():
-    global obs, reward
+def step_action(action):
+    global obs, reward, step_id
     if env is not None:
-        action = env.action_space.sample()
-        ic(action)
         obs, reward, done, info = env.step(action)
+        step_id += 1
         return get_current_observation()
     return None
+
+
+def random_step():
+    action = env.action_space.sample()
+    return step_action(action)
 
 
 def step(dx, dy):
-    global obs, reward
-    if env is not None:
-        action = [dx, dy]
-        ic(action)
-        obs, reward, done, info = env.step(action)
-        # ic(obs)
-        ic(reward)
-        return get_current_observation()
-    return None
+    return step_action((dx, dy))
 
 
 with gr.Blocks(title="Robot Env. Viewer") as demo:
