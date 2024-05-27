@@ -97,21 +97,20 @@ with gr.Blocks(title="Robot Env. Viewer") as demo:
 
     with gr.Row():
         btn_reset = gr.Button("Reset")
-        btn_reset.click(init, inputs=None, outputs=[img, status_text])
-
         btn_step_random = gr.Button("Random Step")
-        btn_step_random.click(random_step, inputs=None, outputs=[img, status_text])
 
     current_dx = gr.Slider(minimum=-0.5, maximum=0.5, step=0.01, label="dx(m)", value=0)
     current_dy = gr.Slider(minimum=-0.5, maximum=0.5, step=0.01, label="dy(m)", value=0)
 
     with gr.Row():
         btn_zero = gr.Button("Zero")
-        btn_zero.click(lambda: (0, 0), outputs=[current_dx, current_dy])
         btn_step = gr.Button("Step")
-        btn_step.click(
-            step, inputs=[current_dx, current_dy], outputs=[img, status_text]
-        )
+
+    btn_reset.click(init, inputs=None, outputs=[img, status_text])
+    btn_step_random.click(random_step, inputs=None, outputs=[img, status_text])
+    btn_zero.click(lambda: (0, 0), outputs=[current_dx, current_dy])
+    btn_step.click(step, inputs=[current_dx, current_dy], outputs=[img, status_text])
+
 
 if __name__ == "__main__":
     init()

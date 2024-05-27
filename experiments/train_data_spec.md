@@ -1,3 +1,7 @@
+
+# Train Data Specification
+
+```python
 spec = {
     "episode_id": TensorSpec(shape=(), dtype=tf.string, name=None),
     "steps": DatasetSpec(
@@ -21,3 +25,4 @@ spec = {
         TensorShape([]),
     ),
 }
+```

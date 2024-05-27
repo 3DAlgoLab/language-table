@@ -41,14 +41,14 @@ def main(argv):
     # Iterate through 5 items in language_table.
     builder = tfds.builder_from_directory(dataset_paths["language_table"])
     ds = builder.as_dataset(split="train")
-    ds = ds.flat_map(lambda x: x["steps"])  # get the dataset as individual steps
+    ds = ds.flat_map(lambda x: x["steps"])  # type: ignore # get the dataset as individual steps
     for item in iter(ds.take(5)):
         print(item)
 
     # Iterate through 5 items in language_table_sim.
     builder = tfds.builder_from_directory(dataset_paths["language_table_sim"])
     ds = builder.as_dataset(split="train")
-    ds = ds.flat_map(lambda x: x["steps"])  # get the dataset as individual steps
+    ds = ds.flat_map(lambda x: x["steps"])  # type: ignore # get the dataset as individual steps
     for item in iter(ds.take(5)):
         print(item)
 
