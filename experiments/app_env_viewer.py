@@ -53,7 +53,9 @@ def get_current_status_text():
     if obs is None:
         return "No environment initialized."
     return (
-        f"Step: {step_id:03}, Reward: {reward}, EE:{obs['effector_target_translation']}"
+        f"Step: {step_id:03}, Reward: {reward}, "
+        f"ET: {obs['effector_translation']}, "
+        f"ETT:{obs['effector_target_translation']}"
     )
 
 
@@ -100,21 +102,16 @@ with gr.Blocks(title="Robot Env. Viewer") as demo:
         btn_step_random = gr.Button("Random Step")
         btn_step_random.click(random_step, inputs=None, outputs=[img, status_text])
 
+    current_dx = gr.Slider(minimum=-0.5, maximum=0.5, step=0.01, label="dx(m)", value=0)
+    current_dy = gr.Slider(minimum=-0.5, maximum=0.5, step=0.01, label="dy(m)", value=0)
+
     with gr.Row():
-        with gr.Column(scale=2):
-            current_dx = gr.Slider(
-                minimum=-0.5, maximum=0.5, step=0.01, label="dx(m)", value=0
-            )
-            current_dy = gr.Slider(
-                minimum=-0.5, maximum=0.5, step=0.01, label="dy(m)", value=0
-            )
         btn_zero = gr.Button("Zero")
-        btn_reset.click(lambda: (0, 0), outputs=[current_dx, current_dy])
+        btn_zero.click(lambda: (0, 0), outputs=[current_dx, current_dy])
         btn_step = gr.Button("Step")
         btn_step.click(
             step, inputs=[current_dx, current_dy], outputs=[img, status_text]
         )
-        btn_zero.click(lambda: (0, 0), outputs=[current_dx, current_dy])
 
 if __name__ == "__main__":
     init()
