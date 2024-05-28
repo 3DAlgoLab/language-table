@@ -30,7 +30,7 @@ except IOError:
 
 install_requires = [
     "clu",
-    "dm-reverb-nightly>=0.9.0.dev20221205",
+    # "dm-reverb-nightly>=0.9.0.dev20221205",
     "gym<=0.23.0",
     "matplotlib",
     "numpy",
